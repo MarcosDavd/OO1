@@ -8,6 +8,12 @@ public class Mamifero {
 	private String especie;
 	private Mamifero padre,madre;
 	
+	public Mamifero(String identidficador) {
+		this.identificador = identidficador;
+	}
+	public Mamifero() {
+		
+	}
 	public Mamifero(LocalDate fechaDeNacimiento, String identificador,String especie,Mamifero padre, Mamifero madre) {
 		// TODO Auto-generated constructor stub
 		this.fechaDeNacimiento = fechaDeNacimiento;
@@ -33,35 +39,25 @@ public class Mamifero {
 
 	public void setPadre(Mamifero padre) {this.padre = padre;}
 
-	public Mamifero getMadre() {return madre;}
+	public Mamifero getMadre() {return this.madre;}
 
 	public void setMadre(Mamifero madre) {this.madre = madre;}
 	
-	
-	private Mamifero esAncestroMadre(Mamifero unMamifero) {
+	public Mamifero getAbuelaMaterna() {
 		// TODO Auto-generated method stub
-		if(this.getMadre().equals(unMamifero))return this.getMadre();
-		else return this.getMadre().esAncestroMadre(unMamifero);
+		return this.getMadre().getMadre();
 	}
-	private Mamifero esAncestroPadre(Mamifero unMamifero) {
-		// TODO Auto-generated method stub
-		if(this.getPadre().equals(unMamifero))return this.getPadre();
-		else return this.getPadre().esAncestroPadre(unMamifero);
+	public Mamifero getAbuelaPaterna() {
+		return this.getPadre().getMadre();
+	}
+	public Mamifero getAbueloPaterno() {
+		return this.getPadre().getPadre();
+	}
+	public Mamifero getAbueloMaterno() {
+		return this.getMadre().getPadre();
 	}
 	
-	public boolean tieneComoA(Mamifero mamifero) {
-		boolean es = false;
-		if(this.esAncestroMadre(mamifero)!= null) {
-			es = true;
-		}
-		if(es==false) {
-			if(this.esAncestroPadre(mamifero)!= null) {
-				es=true;
-			}
-		}
-		
-		return es;
-	}
+	
 	
 	
 	
@@ -72,30 +68,17 @@ public class Mamifero {
 		boolean esAncestro = false;
 		
 		if((this.getPadre() != null)) {
-			if(this.getPadre().equals(unMamifero)) {
-				esAncestro=true;
-			}else {
-				esAncestro = this.getPadre().tieneComoAncestroA(unMamifero);
-			}			
+			esAncestro = this.getPadre().equals(unMamifero);
+			if(!esAncestro) esAncestro = this.getPadre().tieneComoAncestroA(unMamifero);				
 		}
 		if(esAncestro == false) {
-			if( (this.getMadre()) != null) {
-				if(this.getMadre().equals(unMamifero)) {
-					esAncestro=true;
-				}else {
-					esAncestro = this.getMadre().tieneComoAncestroA(unMamifero);
-				}
+			if(this.getMadre()!=null) {
+				esAncestro = this.getMadre().equals(unMamifero);
+				if(!esAncestro) esAncestro = this.getMadre().tieneComoAncestroA(unMamifero);	
 			}
 		}
 		return esAncestro;
-		
-		
-		
-		
-		
-		return true;
-					
 	}
-	
-}
 
+
+}
